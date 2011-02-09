@@ -1,7 +1,7 @@
 require 'net/http'
 require 'uri'
 
-STREAMING_URL = 'http://stream.twitter.com/1/statuses/filter.json?track=%23silviobasta'
+STREAMING_URL = 'http://stream.twitter.com/1/statuses/filter.json?track=silviobasta'
 TWITTER_USERNAME = ENV['TWITTER_USERNAME']
 TWITTER_PASSWORD = ENV['TWITTER_PASSWORD']
 UPDATE_USERNAME = ENV['UPDATE_USERNAME']

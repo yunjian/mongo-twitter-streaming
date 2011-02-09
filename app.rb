@@ -4,6 +4,8 @@ require 'uri'
 STREAMING_URL = 'http://stream.twitter.com/1/statuses/filter.json?track=%23'
 TWITTER_USERNAME = ENV['TWITTER_USERNAME']
 TWITTER_PASSWORD = ENV['TWITTER_PASSWORD']
+UPDATE_USERNAME = ENV['UPDATE_USERNAME']
+UPDATE_PASSWORD = ENV['UPDATE_PASSWORD']
 
 configure do
   if ENV['MONGOHQ_URL']

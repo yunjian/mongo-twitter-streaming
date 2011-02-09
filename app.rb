@@ -33,11 +33,7 @@ EM.schedule do
     while line = buffer.slice!(/.+\r?\n/)
       tweet = JSON.parse(line)
       DB['tweets'].insert(tweet) if tweet['text']
-      url = URI.parse('http://silviobasta.heroku.com/update')
-      req = Net::HTTP::Post.new(url.path)
-      req.basic_auth UPDATE_USERNAME, UPDATE_PASSWORD
-      req.set_form_data(tweet)
-      Net::HTTP.new(url.host, url.port).start { http.request(req) }
+      res = Net::HTTP.post_form(URI.parse("#{UPDATE_USERNAME}:#{UPDATE_PASSWORD}@http://silviobasta.heroku.com/update"), tweet)
     end
   end
 end

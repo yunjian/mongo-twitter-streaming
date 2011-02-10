@@ -29,7 +29,8 @@ get '/' do
   erb :index
 end
 
-Net::HTTP.get_response(URI.parse("http://#{TWITTER_USERNAME}:#{TWITTER_PASSWORD}@stream.twitter.com/1/statuses/filter.json?track=%23silviobasta"))
+req = Net::HTTP.get_response(URI.parse("http://#{TWITTER_USERNAME}:#{TWITTER_PASSWORD}@stream.twitter.com/1/statuses/filter.json?track=%23silviobasta"))
+print req.body
 
 puts 'before EM'
 EM.schedule do

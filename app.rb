@@ -32,9 +32,10 @@ end
 # req = Net::HTTP.get_response(URI.parse("http://#{TWITTER_USERNAME}:#{TWITTER_PASSWORD}@stream.twitter.com/1/statuses/filter.json?track=%23egypt"))
 # print req.body
 
-url = URI.parse('http://stream.twitter.com/1/statuses/filter.json?track=%23silviobasta')
+url = URI.parse('http://stream.twitter.com/1/statuses/filter.json')
 req = Net::HTTP::Post.new(url.path)
 req.basic_auth TWITTER_USERNAME, TWITTER_PASSWORD
+req.set_form_data :track => '23silviobasta'
 res = Net::HTTP.new(url.host, url.port)
 res.start do |http|
   http.read_timeout = 5

@@ -46,36 +46,42 @@ end
 # end
 
 puts 'before EM'
-EM.schedule do
-  puts 'starting EM'
-  http = EM::HttpRequest.new(STREAMING_URL).post(:head => { 'Authorization' => [ TWITTER_USERNAME, TWITTER_PASSWORD ] }, :query => { "track" => "#silviobasta" })
-  buffer = ""
-  http.headers { |hash|  p [:headers, hash] }
-  puts 'before stream'
-  http.stream do |chunk|
-    buffer += chunk
-    puts "check: #{chunk}"
-    while line = buffer.slice!(/.+\r?\n/)
-      tweet = JSON.parse(line)
-      DB['tweets'].insert(tweet) if tweet['text']
-      puts "#{tweet['user']['screen_name']} | #{tweet['text']} | #{tweet['user']['location']} | #{tweet['created_at']}"
-      puts
-      res = Net::HTTP.post_form(URI.parse("http://#{UPDATE_USERNAME}:#{UPDATE_PASSWORD}@silviobasta.heroku.com/update"), tweet)
-    end
-  end
-  http.callback{ |http|
-    puts "CAZZO"
-    puts "1 #{http.response_header.status}"
-    puts "2 #{http.response_header}"
-    puts "3 #{http.response}"
-  }
-  puts http.error?
-  puts http.response
-  puts http.response_header
-  puts http.response_header.status
-  http.errback { |h|
-    puts "Azz???"
-  }
-  puts http.inspect
-  puts 'stream ended'
+
+EM.run do 
+  EM.add_periodic_timer(1) do 
+    puts "Tick! #{Time.now}" 
+  end 
 end
+# EM.schedule do
+#   puts 'starting EM'
+#   http = EM::HttpRequest.new(STREAMING_URL).post(:head => { 'Authorization' => [ TWITTER_USERNAME, TWITTER_PASSWORD ] }, :query => { "track" => "#silviobasta" })
+#   buffer = ""
+#   http.headers { |hash|  p [:headers, hash] }
+#   puts 'before stream'
+#   http.stream do |chunk|
+#     buffer += chunk
+#     puts "check: #{chunk}"
+#     while line = buffer.slice!(/.+\r?\n/)
+#       tweet = JSON.parse(line)
+#       DB['tweets'].insert(tweet) if tweet['text']
+#       puts "#{tweet['user']['screen_name']} | #{tweet['text']} | #{tweet['user']['location']} | #{tweet['created_at']}"
+#       puts
+#       res = Net::HTTP.post_form(URI.parse("http://#{UPDATE_USERNAME}:#{UPDATE_PASSWORD}@silviobasta.heroku.com/update"), tweet)
+#     end
+#   end
+#   http.callback{ |http|
+#     puts "CAZZO"
+#     puts "1 #{http.response_header.status}"
+#     puts "2 #{http.response_header}"
+#     puts "3 #{http.response}"
+#   }
+#   puts http.error?
+#   puts http.response
+#   puts http.response_header
+#   puts http.response_header.status
+#   http.errback { |h|
+#     puts "Azz???"
+#   }
+#   puts http.inspect
+#   puts 'stream ended'
+# end

@@ -29,15 +29,15 @@ get '/' do
   erb :index
 end
 
-# req = Net::HTTP.get_response(URI.parse("http://#{TWITTER_USERNAME}:#{TWITTER_PASSWORD}@stream.twitter.com/1/statuses/filter.json?track=%23silviobasta"))
-# print req.body
-
-Net::HTTP.start('stream.twitter.com') {|http|
-  req = Net::HTTP::Get.new('/1/statuses/filter.json?track=%23silviobasta')
-  req.basic_auth TWITTER_USERNAME, TWITTER_PASSWORD
-  response = http.request(req)
-  print response.body
-}
+req = Net::HTTP.get_response(URI.parse("http://#{TWITTER_USERNAME}:#{TWITTER_PASSWORD}@stream.twitter.com/1/statuses/filter.json?track=%egypt"))
+print req.body
+# 
+# Net::HTTP.start('stream.twitter.com') {|http|
+#   req = Net::HTTP::Get.new('/1/statuses/filter.json?track=%23silviobasta')
+#   req.basic_auth TWITTER_USERNAME, TWITTER_PASSWORD
+#   response = http.request(req)
+#   print response.body
+# }
 
 puts 'before EM'
 EM.schedule do

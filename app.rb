@@ -29,11 +29,12 @@ get '/' do
   erb :index
 end
 
-puts 'before'
+puts 'before EM'
 EM.schedule do
-  puts 'starting'
+  puts 'starting EM'
   http = EM::HttpRequest.new(STREAMING_URL).get :head => { 'Authorization' => [ TWITTER_USERNAME, TWITTER_PASSWORD ] }
   buffer = ""
+  'before stream'
   http.stream do |chunk|
     buffer += chunk
     puts "check: #{chuck}"

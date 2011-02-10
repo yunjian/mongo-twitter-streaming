@@ -59,7 +59,7 @@ EM.schedule do
   puts http.response_header.status
   http.errback { |h|
     puts h.inspect
-    puts h.data
+    puts h.send(:data).inspect
   }
   puts http.inspect
   puts 'stream ended'

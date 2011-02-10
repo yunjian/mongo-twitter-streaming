@@ -5,7 +5,7 @@ require 'uri'
 # require 'em-http-request'
 # require 'json'
 
-STREAMING_URL = 'http://stream.twitter.com/1/statuses/filter.json?track=%23silviobasta'
+STREAMING_URL = 'http://stream.twitter.com/1/statuses/filter.json'
 TWITTER_USERNAME = ENV['TWITTER_USERNAME']
 TWITTER_PASSWORD = ENV['TWITTER_PASSWORD']
 UPDATE_USERNAME = ENV['UPDATE_USERNAME']
@@ -32,7 +32,7 @@ end
 puts 'before EM'
 EM.schedule do
   puts 'starting EM'
-  http = EM::HttpRequest.new(STREAMING_URL).get :head => { 'Authorization' => [ TWITTER_USERNAME, TWITTER_PASSWORD ] }
+  http = EM::HttpRequest.new(STREAMING_URL).get :head => { 'Authorization' => [ TWITTER_USERNAME, TWITTER_PASSWORD ] }, :query => { "track" => "#silviobasta" }
   buffer = ""
   puts 'before stream'
   http.stream do |chunk|

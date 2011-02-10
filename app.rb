@@ -29,6 +29,7 @@ get '/' do
   erb :index
 end
 
+puts 'before'
 EM.schedule do
   puts 'starting'
   http = EM::HttpRequest.new(STREAMING_URL).get :head => { 'Authorization' => [ TWITTER_USERNAME, TWITTER_PASSWORD ] }

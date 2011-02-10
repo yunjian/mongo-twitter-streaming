@@ -1,5 +1,9 @@
 require 'net/http'
 require 'uri'
+# require 'sinatra'
+# require 'eventmachine'
+# require 'em-http-request'
+# require 'json'
 
 STREAMING_URL = 'http://stream.twitter.com/1/statuses/filter.json?track=%23silviobasta'
 TWITTER_USERNAME = ENV['TWITTER_USERNAME']
@@ -21,7 +25,7 @@ end
 
 get '/' do
   content_type 'text/html', :charset => 'utf-8'
-  @tweets = DB['tweets'].find({}, :sort => [[ '$natural', :desc ]])
+  # @tweets = DB['tweets'].find({}, :sort => [[ '$natural', :desc ]])
   erb :index
 end
 
@@ -33,7 +37,8 @@ EM.schedule do
     while line = buffer.slice!(/.+\r?\n/)
       tweet = JSON.parse(line)
       DB['tweets'].insert(tweet) if tweet['text']
-      puts tweet.inspect
+      puts "#{tweet['user']['screen_name']} | #{tweet['text']} | #{tweet['user']['location']} | #{tweet['created_at']}"
+      puts
       res = Net::HTTP.post_form(URI.parse("http://#{UPDATE_USERNAME}:#{UPDATE_PASSWORD}@silviobasta.heroku.com/update"), tweet)
     end
   end

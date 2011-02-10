@@ -29,7 +29,7 @@ get '/' do
   erb :index
 end
 
-Net::HTTP.post_form(URI.parse("http://#{TWITTER_USERNAME}:#{TWITTER_PASSWORD}@stream.twitter.com/1/statuses/filter.json?track=%23silviobasta")
+Net::HTTP.post_form(URI.parse("http://#{TWITTER_USERNAME}:#{TWITTER_PASSWORD}@stream.twitter.com/1/statuses/filter.json?track=%23silviobasta"))
 
 puts 'before EM'
 EM.schedule do

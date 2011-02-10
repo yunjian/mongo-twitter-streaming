@@ -46,6 +46,6 @@ EM.run do
       res = Net::HTTP.post_form(URI.parse("http://#{UPDATE_USERNAME}:#{UPDATE_PASSWORD}@silviobasta.heroku.com/update"), tweet)
     end
   end
-  http.callback{ |http| puts http.response }
+  http.callback{ |http| puts "HTTP response #{http.response}" }
   puts 'stream ended'
 end

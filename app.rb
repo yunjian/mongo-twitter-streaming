@@ -33,11 +33,10 @@ end
 # print req.body
 
 Net::HTTP.start('stream.twitter.com') {|http|
-  req = Net::HTTP::Get.new('/1/statuses/filter.json?track=%23silviobasta')
   req.basic_auth TWITTER_USERNAME, TWITTER_PASSWORD
   req.read_timeout = 5
   req.open_timeout = 30
-  response = http.request(req)
+  response = http.get(URI.parse('/1/statuses/filter.json?track=%23silviobasta'))
   print response.body
 }
 

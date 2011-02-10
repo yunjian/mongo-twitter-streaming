@@ -38,8 +38,8 @@ req.basic_auth TWITTER_USERNAME, TWITTER_PASSWORD
 req.set_form_data :track => '23silviobasta'
 res = Net::HTTP.new(url.host, url.port)
 res.start do |http|
-  # http.read_timeout = 5
-  # http.open_timeout = 30
+  http.read_timeout = 30
+  http.open_timeout = 30
   puts http.request(req).body
 end
 

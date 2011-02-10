@@ -25,7 +25,7 @@ end
 
 get '/' do
   content_type 'text/html', :charset => 'utf-8'
-  # @tweets = DB['tweets'].find({}, :sort => [[ '$natural', :desc ]])
+  @tweets = DB['tweets'].find({}, :sort => [[ '$natural', :desc ]])
   erb :index
 end
 
@@ -34,6 +34,7 @@ EM.schedule do
   buffer = ""
   http.stream do |chunk|
     buffer += chunk
+    puts "check: #{chuck}"
     while line = buffer.slice!(/.+\r?\n/)
       tweet = JSON.parse(line)
       DB['tweets'].insert(tweet) if tweet['text']

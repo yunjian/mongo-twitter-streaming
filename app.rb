@@ -35,17 +35,17 @@ EM.schedule do
   http = EM::HttpRequest.new(STREAMING_URL).post(:head => { 'Authorization' => [ TWITTER_USERNAME, TWITTER_PASSWORD ] }, :query => { "track" => "#silviobasta" })
   buffer = ""
   puts 'before stream'
-  # http.stream do |chunk|
-  #   buffer += chunk
-  #   puts "check: #{chunk}"
-  #   while line = buffer.slice!(/.+\r?\n/)
-  #     tweet = JSON.parse(line)
-  #     DB['tweets'].insert(tweet) if tweet['text']
-  #     puts "#{tweet['user']['screen_name']} | #{tweet['text']} | #{tweet['user']['location']} | #{tweet['created_at']}"
-  #     puts
-  #     res = Net::HTTP.post_form(URI.parse("http://#{UPDATE_USERNAME}:#{UPDATE_PASSWORD}@silviobasta.heroku.com/update"), tweet)
-  #   end
-  # end
+  http.stream do |chunk|
+    buffer += chunk
+    puts "check: #{chunk}"
+    while line = buffer.slice!(/.+\r?\n/)
+      tweet = JSON.parse(line)
+      DB['tweets'].insert(tweet) if tweet['text']
+      puts "#{tweet['user']['screen_name']} | #{tweet['text']} | #{tweet['user']['location']} | #{tweet['created_at']}"
+      puts
+      res = Net::HTTP.post_form(URI.parse("http://#{UPDATE_USERNAME}:#{UPDATE_PASSWORD}@silviobasta.heroku.com/update"), tweet)
+    end
+  end
   http.callback{ |http|
     puts "CAZZO"
     puts "1 #{http.response_header.status}"
@@ -55,5 +55,6 @@ EM.schedule do
   puts http.methods
   puts http.error?
   puts http.response
+  puts "ERRBACK #{http.errback}"
   puts 'stream ended'
 end

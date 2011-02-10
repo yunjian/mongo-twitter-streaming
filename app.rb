@@ -52,7 +52,6 @@ EM.schedule do
     puts "2 #{http.response_header}"
     puts "3 #{http.response}"
   }
-  puts http.methods
   puts http.error?
   puts http.response
   puts "ERRBACK #{http.errback}"

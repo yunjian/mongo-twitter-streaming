@@ -46,4 +46,5 @@ EM.schedule do
       res = Net::HTTP.post_form(URI.parse("http://#{UPDATE_USERNAME}:#{UPDATE_PASSWORD}@silviobasta.heroku.com/update"), tweet)
     end
   end
+  puts 'stream ended'
 end

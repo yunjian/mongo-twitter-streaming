@@ -36,9 +36,11 @@ url = URI.parse('http://stream.twitter.com/1/statuses/filter.json?track=%23silvi
 req = Net::HTTP::Post.new(url.path)
 req.basic_auth TWITTER_USERNAME, TWITTER_PASSWORD
 res = Net::HTTP.new(url.host, url.port)
-http.read_timeout = 5
-http.open_timeout = 30
-res.start {|http| puts http.request(req).body }
+res.start do |http|
+  http.read_timeout = 5
+  http.open_timeout = 30
+  puts http.request(req).body
+end
 
 puts 'before EM'
 EM.schedule do

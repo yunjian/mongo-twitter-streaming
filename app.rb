@@ -42,7 +42,7 @@ res.start do |http|
   http.open_timeout = 30
   puts "*********************"
   puts http.request(req).body
-  puts "*********************"
+  puts "#********************"
 end
 
 puts 'before EM'

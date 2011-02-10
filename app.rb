@@ -32,12 +32,12 @@ end
 puts 'before EM'
 EM.schedule do
   puts 'starting EM'
-  http = EM::HttpRequest.new(STREAMING_URL).get :head => { 'Authorization' => [ TWITTER_USERNAME, TWITTER_PASSWORD ] }, :query => { "track" => "#egypt" }
+  http = EM::HttpRequest.new(STREAMING_URL).get :head => { 'Authorization' => [ TWITTER_USERNAME, TWITTER_PASSWORD ] }, :query => { "track" => "#egypt" }.callback { |http| puts http.response }
   buffer = ""
   puts 'before stream'
   http.stream do |chunk|
     buffer += chunk
-    puts "check: #{chuck}"
+    puts "check: #{chunk}"
     while line = buffer.slice!(/.+\r?\n/)
       tweet = JSON.parse(line)
       DB['tweets'].insert(tweet) if tweet['text']

@@ -19,7 +19,7 @@ configure do
   else
     DB = Mongo::Connection.new.db("mongo-twitter-streaming")
   end
-  
+
   DB.create_collection("tweets", :capped => true, :size => 16777216)
 end
 
@@ -46,6 +46,10 @@ EM.schedule do
       res = Net::HTTP.post_form(URI.parse("http://#{UPDATE_USERNAME}:#{UPDATE_PASSWORD}@silviobasta.heroku.com/update"), tweet)
     end
   end
-  http.callback{ |http| puts "HTTP response #{http.response}" }
+  http.callback{ |http|
+    p http.response_header.status
+    p http.response_header
+    p http.response
+  }
   puts 'stream ended'
 end

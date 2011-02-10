@@ -36,6 +36,7 @@ url = URI.parse('http://stream.twitter.com/1/statuses/filter.json')
 req = Net::HTTP::Post.new(url.path)
 req.basic_auth TWITTER_USERNAME, TWITTER_PASSWORD
 req.set_form_data :track => '%23silviobasta'
+puts req.inspect
 res = Net::HTTP.new(url.host, url.port)
 res.start do |http|
   http.read_timeout = 30

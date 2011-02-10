@@ -32,7 +32,7 @@ end
 puts 'before EM'
 EM.run do
   puts 'starting EM'
-  http = EM::HttpRequest.new(STREAMING_URL).get(:head => { 'Authorization' => [ TWITTER_USERNAME, TWITTER_PASSWORD ] }, :query => { "track" => "#truth" })
+  http = EM::HttpRequest.new(STREAMING_URL).get(:head => { 'Authorization' => [ TWITTER_USERNAME, TWITTER_PASSWORD ] }, :query => { "track" => "#silviobasta" })
   buffer = ""
   puts 'before stream'
   http.stream do |chunk|

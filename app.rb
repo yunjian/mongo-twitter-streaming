@@ -34,6 +34,7 @@ EM.schedule do
   puts 'starting EM'
   http = EM::HttpRequest.new(STREAMING_URL).post(:head => { 'Authorization' => [ TWITTER_USERNAME, TWITTER_PASSWORD ] }, :query => { "track" => "#silviobasta" })
   buffer = ""
+  http.headers { |hash|  p [:headers, hash] }
   puts 'before stream'
   http.stream do |chunk|
     buffer += chunk

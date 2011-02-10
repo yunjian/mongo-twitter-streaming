@@ -30,7 +30,7 @@ get '/' do
 end
 
 puts 'before EM'
-EM.schedule do
+EM.run do
   puts 'starting EM'
   http = EM::HttpRequest.new(STREAMING_URL).get(:head => { 'Authorization' => [ TWITTER_USERNAME, TWITTER_PASSWORD ] }, :query => { "track" => "#truth" })
   buffer = ""

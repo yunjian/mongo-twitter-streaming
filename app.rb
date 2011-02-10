@@ -40,7 +40,9 @@ res = Net::HTTP.new(url.host, url.port)
 res.start do |http|
   http.read_timeout = 30
   http.open_timeout = 30
+  puts "*********************"
   puts http.request(req).body
+  puts "*********************"
 end
 
 puts 'before EM'

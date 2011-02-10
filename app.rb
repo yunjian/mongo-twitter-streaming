@@ -30,6 +30,7 @@ get '/' do
 end
 
 EM.schedule do
+  puts 'starting'
   http = EM::HttpRequest.new(STREAMING_URL).get :head => { 'Authorization' => [ TWITTER_USERNAME, TWITTER_PASSWORD ] }
   buffer = ""
   http.stream do |chunk|

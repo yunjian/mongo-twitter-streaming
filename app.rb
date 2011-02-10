@@ -52,6 +52,6 @@ EM.schedule do
     puts "2 #{http.response_header}"
     puts "3 #{http.response}"
   }
-  puts http.errors
+  puts http.methods
   puts 'stream ended'
 end

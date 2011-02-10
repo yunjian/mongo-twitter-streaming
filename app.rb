@@ -54,6 +54,8 @@ EM.schedule do
   }
   puts http.error?
   puts http.response
+  puts http.response_header
+  puts http.response_header.status
   puts "ERRBACK #{http.errback}"
   puts 'stream ended'
 end

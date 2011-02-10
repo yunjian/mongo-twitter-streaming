@@ -47,9 +47,10 @@ EM.schedule do
     end
   end
   http.callback{ |http|
-    p http.response_header.status
-    p http.response_header
-    p http.response
+    puts "CAZZO"
+    puts "1 #{http.response_header.status}"
+    puts "2 #{http.response_header}"
+    puts "3 #{http.response}"
   }
   puts 'stream ended'
 end

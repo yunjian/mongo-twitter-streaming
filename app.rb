@@ -35,6 +35,7 @@ EM.run do
   http = EM::HttpRequest.new(STREAMING_URL).get(:head => { 'Authorization' => [ TWITTER_USERNAME, TWITTER_PASSWORD ] }, :query => { "track" => "#silviobasta" })
   buffer = ""
   puts 'before stream'
+  res = nil
   http.stream do |chunk|
     buffer += chunk
     puts "check: #{chunk}"
@@ -46,5 +47,6 @@ EM.run do
       res = Net::HTTP.post_form(URI.parse("http://#{UPDATE_USERNAME}:#{UPDATE_PASSWORD}@silviobasta.heroku.com/update"), tweet)
     end
   end
+  puts res
   puts 'stream ended'
 end

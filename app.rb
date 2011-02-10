@@ -34,7 +34,7 @@ EM.schedule do
   puts 'starting EM'
   http = EM::HttpRequest.new(STREAMING_URL).get :head => { 'Authorization' => [ TWITTER_USERNAME, TWITTER_PASSWORD ] }
   buffer = ""
-  'before stream'
+  puts 'before stream'
   http.stream do |chunk|
     buffer += chunk
     puts "check: #{chuck}"

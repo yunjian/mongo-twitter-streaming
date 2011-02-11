@@ -50,6 +50,18 @@ puts 'before EM'
 EM.run do 
   EM.add_periodic_timer(1) do 
     puts "Tick! #{Time.now}" 
+    http = EM::HttpRequest.new(STREAMING_URL).post(:head => { 'Authorization' => [ TWITTER_USERNAME, TWITTER_PASSWORD ] }, :query => { "track" => "#silviobasta" })
+    http.stream do |chunk|
+      buffer += chunk
+      puts "check: #{chunk}"
+      while line = buffer.slice!(/.+\r?\n/)
+        tweet = JSON.parse(line)
+        DB['tweets'].insert(tweet) if tweet['text']
+        puts "#{tweet['user']['screen_name']} | #{tweet['text']} | #{tweet['user']['location']} | #{tweet['created_at']}"
+        puts
+        res = Net::HTTP.post_form(URI.parse("http://#{UPDATE_USERNAME}:#{UPDATE_PASSWORD}@silviobasta.heroku.com/update"), tweet)
+      end
+    end
   end 
 end
 # EM.schedule do

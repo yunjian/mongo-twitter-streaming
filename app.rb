@@ -30,6 +30,19 @@ get '/' do
   erb :index
 end
 
+puts 'start'
+EM.schedule do
+  TweetStream::Client.new(TWITTER_USERNAME, TWITTER_PASSWORD).on_delete do |status_id, user_id|
+    # Tweet.delete(status_id)
+    puts "#{status_id} deleted"
+  end.on_limit do |skip_count|
+    puts "limited, skip count #{skip_count}"
+  end.track('#silviobasta') do |status|
+    puts "[#{status.user.screen_name}] #{status.text}"
+  end
+  puts 'end'
+end
+
 # req = Net::HTTP.get_response(URI.parse("http://#{TWITTER_USERNAME}:#{TWITTER_PASSWORD}@stream.twitter.com/1/statuses/filter.json?track=%23egypt"))
 # print req.body
 
@@ -45,17 +58,6 @@ end
 #   puts http.request(req).body
 #   puts "#********************"
 # end
-
-puts 'start'
-TweetStream::Client.new(TWITTER_USERNAME, TWITTER_PASSWORD).on_delete{ |status_id, user_id|
-  # Tweet.delete(status_id)
-  puts "#{status_id} deleted"
-}.on_limit { |skip_count|
-  puts "limited, skip count #{skip_count}"
-}.track('#silviobasta') do |status|
-  puts "[#{status.user.screen_name}] #{status.text}"
-end
-puts 'end'
 
 # puts 'before EM'
 # EM.run do 

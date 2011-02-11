@@ -1,5 +1,6 @@
 require 'net/http'
 require 'uri'
+require 'tweetstream'
 # require 'sinatra'
 # require 'eventmachine'
 # require 'em-http-request'
@@ -46,25 +47,32 @@ end
 # end
 
 puts 'before EM'
-
-EM.run do 
-  EM.add_periodic_timer(15) do 
-    puts "Tick! #{Time.now}" 
-    http = EM::HttpRequest.new(STREAMING_URL).post(:head => { 'Authorization' => [ TWITTER_USERNAME, TWITTER_PASSWORD ] }, :query => { "track" => "#silviobasta" })
-    buffer = ""
-    http.stream do |chunk|
-      buffer += chunk
-      puts "check: #{chunk}"
-      while line = buffer.slice!(/.+\r?\n/)
-        tweet = JSON.parse(line)
-        DB['tweets'].insert(tweet) if tweet['text']
-        puts "#{tweet['user']['screen_name']} | #{tweet['text']} | #{tweet['user']['location']} | #{tweet['created_at']}"
-        puts
-        res = Net::HTTP.post_form(URI.parse("http://#{UPDATE_USERNAME}:#{UPDATE_PASSWORD}@silviobasta.heroku.com/update"), tweet)
-      end
-    end
-  end 
+TweetStream::Client.new(TWITTER_USERNAME, TWITTER_PASSWORD)).on_delete{ |status_id, user_id|
+  Tweet.delete(status_id)
+}.on_limit { |skip_count|
+  # do something
+}.track('%23silviobasta') do |status|
+  puts "[#{status.user.screen_name}] #{status.text}"
 end
+
+# EM.run do 
+#   EM.add_periodic_timer(15) do 
+#     puts "Tick! #{Time.now}" 
+#     http = EM::HttpRequest.new(STREAMING_URL).post(:head => { 'Authorization' => [ TWITTER_USERNAME, TWITTER_PASSWORD ] }, :query => { "track" => "#silviobasta" })
+#     buffer = ""
+#     http.stream do |chunk|
+#       buffer += chunk
+#       puts "check: #{chunk}"
+#       while line = buffer.slice!(/.+\r?\n/)
+#         tweet = JSON.parse(line)
+#         DB['tweets'].insert(tweet) if tweet['text']
+#         puts "#{tweet['user']['screen_name']} | #{tweet['text']} | #{tweet['user']['location']} | #{tweet['created_at']}"
+#         puts
+#         res = Net::HTTP.post_form(URI.parse("http://#{UPDATE_USERNAME}:#{UPDATE_PASSWORD}@silviobasta.heroku.com/update"), tweet)
+#       end
+#     end
+#   end 
+# end
 # EM.schedule do
 #   puts 'starting EM'
 #   http = EM::HttpRequest.new(STREAMING_URL).post(:head => { 'Authorization' => [ TWITTER_USERNAME, TWITTER_PASSWORD ] }, :query => { "track" => "#silviobasta" })

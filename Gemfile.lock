@@ -13,12 +13,19 @@ GEM
     mongo (1.0.8)
       bson (>= 1.0.5)
     rack (1.2.1)
+    roauth (0.0.3)
     sinatra (1.0)
       rack (>= 1.0)
     thin (1.2.7)
       daemons (>= 1.0.9)
       eventmachine (>= 0.12.6)
       rack (>= 1.0.0)
+    tweetstream (1.0.4)
+      daemons
+      twitter-stream
+    twitter-stream (0.1.10)
+      eventmachine (>= 0.12.8)
+      roauth (>= 0.0.2)
 
 PLATFORMS
   ruby
@@ -30,3 +37,4 @@ DEPENDENCIES
   mongo
   sinatra
   thin
+  tweetstream

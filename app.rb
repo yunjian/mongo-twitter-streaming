@@ -1,7 +1,7 @@
 require 'net/http'
 require 'uri'
 require 'tweetstream'
-# require 'sinatra'
+require 'sinatra'
 # require 'eventmachine'
 # require 'em-http-request'
 # require 'json'
@@ -46,16 +46,18 @@ end
 #   puts "#********************"
 # end
 
-puts 'before EM'
+puts 'start'
 TweetStream::Client.new(TWITTER_USERNAME, TWITTER_PASSWORD).on_delete{ |status_id, user_id|
   # Tweet.delete(status_id)
   puts "#{status_id} deleted"
 }.on_limit { |skip_count|
   puts "limited, skip count #{skip_count}"
-}.track('%23silviobasta') do |status|
+}.track('#silviobasta') do |status|
   puts "[#{status.user.screen_name}] #{status.text}"
 end
+puts 'end'
 
+# puts 'before EM'
 # EM.run do 
 #   EM.add_periodic_timer(15) do 
 #     puts "Tick! #{Time.now}" 

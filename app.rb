@@ -26,7 +26,7 @@ end
 
 get '/' do
   content_type 'text/html', :charset => 'utf-8'
-  @tweets = DB['tweets'].find({}, :sort => [[ '$natural', :desc ]])
+  @tweets = DB['tweets'].find({}, :limit => 5, :sort => [[ '$natural', :desc ]])
   erb :index
 end
 

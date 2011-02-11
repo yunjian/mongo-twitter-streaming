@@ -48,9 +48,10 @@ end
 
 puts 'before EM'
 TweetStream::Client.new(TWITTER_USERNAME, TWITTER_PASSWORD).on_delete{ |status_id, user_id|
-  Tweet.delete(status_id)
+  # Tweet.delete(status_id)
+  puts "#{status_id} deleted"
 }.on_limit { |skip_count|
-  # do something
+  puts "limited, skip count #{skip_count}"
 }.track('%23silviobasta') do |status|
   puts "[#{status.user.screen_name}] #{status.text}"
 end

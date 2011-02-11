@@ -47,7 +47,7 @@ end
 # end
 
 puts 'before EM'
-TweetStream::Client.new(TWITTER_USERNAME, TWITTER_PASSWORD)).on_delete{ |status_id, user_id|
+TweetStream::Client.new(TWITTER_USERNAME, TWITTER_PASSWORD).on_delete{ |status_id, user_id|
   Tweet.delete(status_id)
 }.on_limit { |skip_count|
   # do something

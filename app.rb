@@ -48,9 +48,10 @@ end
 puts 'before EM'
 
 EM.run do 
-  EM.add_periodic_timer(1) do 
+  EM.add_periodic_timer(5) do 
     puts "Tick! #{Time.now}" 
     http = EM::HttpRequest.new(STREAMING_URL).post(:head => { 'Authorization' => [ TWITTER_USERNAME, TWITTER_PASSWORD ] }, :query => { "track" => "#silviobasta" })
+    buffer = ""
     http.stream do |chunk|
       buffer += chunk
       puts "check: #{chunk}"

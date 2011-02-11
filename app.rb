@@ -6,7 +6,6 @@ require 'sinatra'
 # require 'em-http-request'
 # require 'json'
 
-STREAMING_URL = 'http://stream.twitter.com/1/statuses/filter.json'
 TWITTER_USERNAME = ENV['TWITTER_USERNAME']
 TWITTER_PASSWORD = ENV['TWITTER_PASSWORD']
 UPDATE_USERNAME = ENV['UPDATE_USERNAME']

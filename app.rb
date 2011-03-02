@@ -34,9 +34,6 @@ EM.schedule do
     puts "limited, skip count #{skip_count}"
   end.track('#dibake') do |status|
     puts "[#{status.user.screen_name}] #{status.text}"
-    tweet = { :text => status.text, :user => { :screen_name => status.user.screen_name } }
-    DB['tweets'].insert(tweet)
-
     vote = 'NONE'
     vote = 'CONCUR' if status.text[/CONCUR/]
     if status.text[/CONTRA/]
@@ -51,6 +48,7 @@ EM.schedule do
     if status.text[/#DIBAKE (\d+)/]
         topic = $1
     end
+    puts "[#{topic}] [#{vote}] #{status.text}"
     if vote != 'NONE'
         res = Net::HTTP.post_form(URI.parse('http://dibake.com/api/#{DIBAKE_API_KEY}'),
                           {'twitter_id' => "#{status.user.screen_name}", 
@@ -60,6 +58,8 @@ EM.schedule do
 			  })
     end
 
+    tweet = { :text => status.text, :user => { :screen_name => status.user.screen_name } }
+    DB['tweets'].insert(tweet)
   end
   puts 'end'
 end

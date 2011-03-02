@@ -2,14 +2,10 @@ require 'net/http'
 require 'uri'
 require 'tweetstream'
 require 'sinatra'
-# require 'eventmachine'
-# require 'em-http-request'
-# require 'json'
 
 TWITTER_USERNAME = ENV['TWITTER_USERNAME']
 TWITTER_PASSWORD = ENV['TWITTER_PASSWORD']
-UPDATE_USERNAME = ENV['UPDATE_USERNAME']
-UPDATE_PASSWORD = ENV['UPDATE_PASSWORD']
+DIBAKE_API_KEY = ENV['DIBAKE_API_KEY']
 
 configure do
   if ENV['MONGOHQ_URL']
@@ -36,11 +32,34 @@ EM.schedule do
     puts "#{status_id} deleted"
   end.on_limit do |skip_count|
     puts "limited, skip count #{skip_count}"
-  end.track('#silviobasta') do |status|
+  end.track('#dibake') do |status|
     puts "[#{status.user.screen_name}] #{status.text}"
     tweet = { :text => status.text, :user => { :screen_name => status.user.screen_name } }
     DB['tweets'].insert(tweet)
-    res = Net::HTTP.post_form(URI.parse("http://#{UPDATE_USERNAME}:#{UPDATE_PASSWORD}@silviobasta.heroku.com/update"), tweet)
+
+    vote = 'NONE'
+    vote = 'CONCUR' if status.text[/CONCUR/]
+    if status.text[/CONTRA/]
+        vote = vote == 'NONE' ? 'CONTRA' : 'NONE'
+    end
+    if status.text[/#dibake (\d+)/]
+        topic = $1
+    end
+    if status.text[/#Dibake (\d+)/]
+        topic = $1
+    end
+    if status.text[/#DIBAKE (\d+)/]
+        topic = $1
+    end
+    if vote != 'NONE'
+        res = Net::HTTP.post_form(URI.parse('http://dibake.com/api/#{DIBAKE_API_KEY}'),
+                          {'twitter_id' => "#{status.user.screen_name}", 
+			  'status' => "#{status.text}",
+			  'topic' => "#{topic}",
+			  'vote' => "#{vote}"
+			  })
+    end
+
   end
   puts 'end'
 end

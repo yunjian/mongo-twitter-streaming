@@ -33,22 +33,19 @@ EM.schedule do
   end.on_limit do |skip_count|
     puts "limited, skip count #{skip_count}"
   end.track('#dibake') do |status|
-    vote = 'NONE'
-    vote = 'CONCUR' if status.text[/CONCUR/]
-    if status.text[/CONTRA/]
-        vote = vote == 'NONE' ? 'CONTRA' : 'NONE'
-    end
-    if status.text[/#dibake (\d+)/]
-        topic = $1
-    end
-    if status.text[/#Dibake (\d+)/]
-        topic = $1
-    end
-    if status.text[/#DIBAKE (\d+)/]
-        topic = $1
+    vote = 'none'
+    if status.text[/#dibake (\d+) yes or no/]
+      topic = $1
+      vote = 'none'
+    elsif status.text[/#dibake (\d+) no/]
+      topic = $1
+      vote = 'contra'
+    elsif status.text[/#dibake (\d+) yes/]
+      topic = $1
+      vote = 'concur'
     end
     puts "[#{topic}] [#{vote}] #{status.text}"
-    if vote != 'NONE'
+    if vote != 'none'
         res = Net::HTTP.post_form(URI.parse("http://dibake.com/api/#{DIBAKE_API_KEY}"),
                           {'twitter_id' => "#{status.user.screen_name}", 
 			  'status' => "#{status.text}",
